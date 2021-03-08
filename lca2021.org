@@ -1,0 +1,7 @@
+* Teaching an old Bison Gnu Tricks: What's next for Emacs?
+
+In a rare positive of 2020, GNU/Emacs 27.1 was released with a heap of new features and performance improvements.
+This was almost immediately followed by the Navel-Gazing and Bikeshedding that gets emacs-devel in the news.
+The real news didn't make any one the usual watering hole websites, but was arguably more important.
+After years of talk, Emacs is finally shedding it's X dependant interface, driving head first toward a lexical scoping and even picking up Native compilation
+In this talk I will look at features slanted for inclusion in a future version of emacs with a particular focus on the implementation of the Pure-GTK port, allowing emacs to run on Wayland, and all the grungy code that entails.
