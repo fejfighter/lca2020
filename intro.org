@@ -1,0 +1,574 @@
+#+AUTHOR: JEFF WALSH
+#+DATE: 2020-01-24
+#+TITLE: Teaching an old Bovine GNU/Tricks
+#+SUBTITLE: What's next for Emacs?
+#+EMAIL: fejfighter@gmail.com
+#+OPTIONS: num:nil toc:nil reveal_keyboard:t reveal_overview:t
+#+REVEAL_HLEVEL: 3
+#+REVEAL_TITLE_SLIDE: <h2>%t</h2><h3>%s</h3> %a %d 
+
+# * Disclaimer
+# - This Talk Contains The following Topics
+#  - Wayland
+#  - 1 Half of the Editor Wars
+#  - And probably at least 1 other topic that will fire up keybaords
+# - My setup works for me 
+# #+BEGIN_NOTES
+# I realise I am about to touch on some highly controversial topics:
+# Yes: wayland - it works for me, it has more advatages for me over X,
+# Yes: emacs - it works for me and has for 10 years
+# If I try I could probably throw out strong opinions on over popular languages that need work.
+# #+END_NOTES
+
+
+* 2020 Wasn't all Bad!
+- Emacs 27.1 released in August
+ - Harfbuzz support (ligatures ans emojis)
+ - Rendering fixes ans speed ups
+ - libjansson for lsp-modes
+ - portable dumping
+ - TABS!
+#+BEGIN_NOTES
+For those of us who prefer their editors non-modal a new version of emacs came out of the gate in august last year
+There were the usual entries of in the changelog that would take a day to go through, but for a project so old,
+it was surprising to note how many contentious problems had seemed to settle
+
+#+END_NOTES
+
+* Navel Gazing Sets in:
+- "Why is emacs so square?"/\\
+  "How to make Emacs popular again."
+- LWN Articles and comment threads
+  - Spills over into forums
+#+BEGIN_NOTES
+"there's tabs, what else did you want?"
+Emacs devel was dominated by discussions about hard shifts
+A well meaning but fresh user makes some suggestions to improve emacs and make it more popular.
+This spills into lwn, twice, and continues for -weeks- months on the mailing list
+
+#+END_NOTES
+
+* History repeating
+  - This occurs every year on emacs-devel
+  - Discussion is often deep, technical, but respectful
+    - Bike shedding just doesn't cut it
+  - Action can take years
+    - Initial Resistance
+    - Code is welcomed
+#+BEGIN_NOTES
+2020 is only unusual in 2 parts, this discussion happened three times
+some of the complaints from the last time are being addressed
+
+There will be another this year, and next year and so on.
+
+The thing to note is that partly because of the size, there's some hesitation to start the work,
+but if you can get over that hump, code is often included, potentially with modifications
+#+END_NOTES
+
+* Some Aspirational Options
+  - Change Emacs Lisp to ___
+  - Replace the C with ___
+  - Replace the Keybindings to "modern standards" *
+#+BEGIN_NOTES
+
+As expected there are some common themes that come up, you can just about grab
+These come up all the time by well meaning people, but looking to make that barrier a little lower.
+
+if you fill in the blanks with javascript emacs would be vs code and that wouldn't be fun.
+
+I should note that changing the keybindings is for default, which is the real issue, the work has been done but is a little hidden.
+#+END_NOTES
+
+* Technically too Hard, Socially Easy:
+- Make "The lisp bit" faster
+ - Write /less/ C, and /more/ lisp
+ - make what we have more interactive
+- A re-write of *NIX GUI
+  - the current format is too fragile
+  - X might change underneath
+
+#+BEGIN_NOTES
+Other major wish list items that repeat often are fixing the lisp stack to reduce the C burden, improve interactivity and take emacs in new directions.
+
+Finally, a regularly acknowledged issue is the display interface on Unix systems.
+It has to be one of the oldest continually developed graphical interfaces on X, predating most ui toolkits, instead preferring raw 
+
+#+END_NOTES
+
+# * Why Not Use <Blank>
+# - Visual Studio
+# - Eclipse/Netbeans/CLion/XCode
+# - Textmate
+# - Sublime
+# - Atom
+#   - Visual Studio Code
+# #+BEGIN_NOTES
+
+# #+END_NOTES
+
+* Why use emacs?
+- It's too late to change
+  - It has been paying the bills for close to 10 years
+- My toolbox that goes from place to place
+  - Familiar environment
+  - Features get ported quickly
+- Treat C as C and not a poor man's C++
+#+BEGIN_NOTES
+If it's so crusty, why not use anything else?
+
+far too late.
+I don't have the enthusiasm to adapt my workflow.
+
+
+A mechanic has their toolbox how they like, this is mine.
+I get to build my tools in the same language as everything else, not through an api or blessed language
+
+Great care is taken to ensure those tools remain in a working manner through releases
+
+doesn't treat c as c++, doesn't lock me into any particular thing,
+just provide the rope to shoot myself in the foot
+#+END_NOTES
+
+* And Wayland?
+- "Works on my box"™
+- Feels less clunky than X
+  - Drags Unix desktops towards modern expectations
+  - Even if it's just a formalisation of what X has become
+- Emacs is my only key thing still on X    
+#+BEGIN_NOTES
+At risk of derailing very early, I am going to say something positive about wayland, despite never writing code for it.
+
+but first off my hardware is well supported in kernel, and I don't have a tightly configured environment,
+I rarely run more than emacs, a browser and a few terminals
+#+END_NOTES
+
+* What /is/ Emacs
+- "A great operating system, \\
+  it just needs a decent editor"
+- A lisp Environment that happens to an editor built in. 
+
+#+BEGIN_NOTES
+With all that said it's worth considering what makes up emacs.
+
+Many have heard the joke, but it's not entirely wrong
+
+Emacs is a lisp environment, that an editor has been implemented in.
+The keybindings are and implementation detail, but the lisp engine is essential.
+Porting to Javascript makes it visual studio Code
+#+END_NOTES
+
+* No Lisp - No Emacs
+- Don't define the problem in the language
+- Build a language to best defines the problem
+- Inverted attitude to development
+  - Expected flexibility
+#+BEGIN_NOTES
+Its probably worth noting that emacs started on lisp machines,
+when UNIX won, the approach was to port UNIX to lisp, not adapt to TCL that was big at the time
+#+END_NOTES
+
+* Lisp All the things!
+- Everything routes through Lisp
+  - pressing a "j" calls the lisp function (self-insert-command "j")
+  - arrow up calls (previous-line)
+  - Can be reconfigured easily
+#+BEGIN_NOTES
+the ability to modify every component is core to the emacs philosophy,
+
+so everything is defined in lisp, and everything can be overridden,
+desperately need vim key bindings, you're wrong, but go for it, there are 4 versions available
+
+broken a key? emulate it.
+
+#+END_NOTES
+
+* Lisp Plugins?
+- Incredibly Easy to extend
+- Configuration is Genuine Extension
+- Everything is the API
+  
+#+BEGIN_NOTES
+  Being on par with the implementation language provides easy, complete customisation.
+  there are no limitations with the api, there isn't one, plugins can easily build on each other's work, as if part of the core distribution
+  
+#+END_NOTES
+
+* [[file:./dawg.jpg]]
+
+* That Extension Language
+   - 60% of emacs is LISP
+   - 16% is ROFF ie changelog
+   - 15% is C
+     - Lisp interpreter
+     - Lisp Special Forms
+     - Graphical Toolkit (Athena)
+     - Redisplay
+#+BEGIN_NOTES
+A quick look at the emacs repo suggests that of the 3.2 million lines of code roughly 60% is written in lisp,
+
+The interesting part is that Emacs maintains a separate, Changelog starting before source management was used,
+It's now at a point where the log out sizes the C
+
+The other 15% is C, that's enough to interpret the LISP, and provide some core forms of the basic types and the Terminals
+Thats compatibility with practically every major operating system since the 80's, though unsupported platforms are being removed
+
+In spite of the importance, I'm largely going to ignore that part of emacs and look at some of the 15% written in C.
+#+END_NOTES
+
+* Redisplay Code
+  - C written by Lispers
+    - With old compilers
+  - Heavy Use of Macros
+    - Abstractions, across platforms
+    - Hide the horror of cross language func calls
+  - Very Complex, Very Efficient code 
+    - Minimal data transmission to update a display
+#+BEGIN_NOTES
+
+This is not a sql lite, Solaris kernel, or other clean and tidy C project
+
+Heavy use of macros to "abstract" out variations, convert up and down to the lisp layer
+This is 40 years of adapting, and overcoming issues, slow connections and quirks
+
+tracing redisplay exection is notoriously difficult, with many branch points and tricks to minimise lag on primitive hardware at MIT machines.
+
+#+END_NOTES
+
+* But First, History
+"One day, a fool wanted to run Emacs in a GUI as a native GUI program. The rest is ChangeLog."
+ -Daniel Colascione
+#+BEGIN_NOTES
+Emacs was a fairly early adopter of X, most of the nice support libraries would appear years later
+More boilerplate was required to get things on screen.
+Consequently, it allows emacs to take on the role of an X window manager, with only lisp
+#+END_NOTES
+
+* Emacs isn't a GUI
+- Pretend the X is a terminal
+  - Write a terminal Layer in X, put in emacs
+  - Hook into sigio to listen for updates
+  - Draw whenever redisplay completes
+    - emacs is the master of the domain
+  - on expose, draw grey and complete redisplay
+    - Flickery emacs
+#+BEGIN_NOTES
+I say adopter of X, I mean X was adopted to emacs
+
+emacs wants to own every part of it's loop, it will draw when it needs to, not when X requests it.
+
+#+END_NOTES
+
+* Emacs isn't a GTK app
+- pretend that the X widget is really GTK instead
+  - Ask for a "GTKWindow"
+    - stuff X Primitives inside
+    - forward XEvents to lisp engine
+  - Typecast when GCC is upset
+  - Don't use anything of GTK
+#+BEGIN_NOTES
+
+#+END_NOTES
+
+* GTK3 Port
+  - GTK3 is just GTK2 with a new theme engine*
+    - Still use X drawing and events
+    - #ifdef some function calls
+#+BEGIN_NOTES
+I'm simplifying this a little, but there are less #ifdefs than you'd expect
+#+END_NOTES
+
+# * video
+# @@html:<video controls width="400" height="300" src=""></video>@@
+* Printing Support
+  - Initial Cairo Support patch added for printing.
+  - Periodically maintained as a patchset.
+    
+* A Wayland Port?
+  - GTK3 supports Wayland
+  - Cairo is recommended for Wayland
+  - What about emacs?
+#+BEGIN_NOTES
+
+#+END_NOTES
+
+* A wayland Port?
+  - Rudimentary Wayland port on mailing list
+    - Used Cairo Patch for drawing
+    - Missing many features
+  - This Proof of concept was not expanded upon
+#+BEGIN_NOTES
+
+#+END_NOTES
+
+* Cairo as a rendering Library
+  - Finally added in Feb 2015
+    - Experimental warning removed in June 2019
+    - Default in January 2020
+  - The first signs of moving away from X
+  - Another Layer of #ifdef Hell 
+#+BEGIN_NOTES
+Full cairo support for all X toolkits commited in Feb 2015, but some work occured earlier.
+The big scary experimental warning was removed in 2019, it's now set as default for the _next_ release of emacs
+#+END_NOTES
+
+* The state of Emacs at LCA 2019
+  - Emacs is a little ugly and somewhat slow
+  - XWayland still has an overhead.
+  - X Terminal code is pushing 20k LOC
+#+BEGIN_NOTES
+Fedora on a modern laptop feels competitive with macos,
+still a few rough edges, the one that sticks out is emacs.
+Xwayland compat layer is slower, but getting better
+#+END_NOTES
+
+* A mailing list
+#+BEGIN_SRC 
+> Now the cairo build on master can display multicolor font if linked
+> with cairo >= 1.16.0.
+
+BTW, I saw there's a work-in-progress Wayland port of Emacs out there:
+
+    https://github.com/masm11/emacs
+
+Has anyone taken a look at it?
+
+
+        Stefan "who knows very little about those things"
+#+END_SRC
+
+* A Pure GTK Port
+  - Migrate all of the X-focused code to gtk equivalents
+    - Cut what doesn't make sense
+  - Steal all existing GTK/Cairo drawing code,
+    - (push maintenance back upstream)
+  - treat GTK as GTK
+    
+* PGTK - HOW?
+  - Create a new "Terminal" option
+    - add calls to initialize
+    - Register Lisp facing subroutines
+    - #ifdef/type-pun in common GTK code
+
+** How - pgtkterm.{c,h}
+   - Core toolkit code
+   - Get window on screen
+     - Provide/Control cairo context
+     - Handles events
+   - Abstraction Macros
+   - Keeps track of State
+       
+** pgtkfns.c, term/pgtk-win.el
+   - Lisp interfacing code
+   - define 
+     
+** emacsgtkfixed.c
+   - the emacs "widget"
+   - endpoint for events
+   - Contain other widgets
+
+** gtkutil.c
+   - interface between emacs and GTK
+   - Shared with impure GTK emacs
+   - GTK specific bringup
+     - add widgets to window
+     - scrollbar handling
+
+** pgtkgui.h
+   - X-ism translation macros
+   - Handle rectangles
+   - Fake in values
+
+** Others
+- pgtkim.c
+   - non Latin character input
+- pgtkselect.{ch}
+  - drag and drop
+  - clipboard
+  - Not the select() call
+- pgtkmenu.c
+  - menu/tool bar work
+
+* Challenges
+
+** Emacs is huge and old
+- X11 emacs wants to know everything
+  - GTK wants to abstract that
+- some compatibility work-arounds aren't clear
+  - Fixes a bug in one config
+  - May not be relevant
+- Filtering out fixes/ Keep intents
+#+BEGIN_NOTES
+
+As alluded to, the terminal code for X is huge and messy.
+it adds up to some 20k lines of code, many paths
+it does the same work as GDK, but raw.
+
+there are many compat hacks
+and history is limited. it wasn't a matter of take  take the X code and delete what's not used
+that's not always easy to follow ifdef paths could leap over a 1000 lines of code, with nested ones in between
+
+in addition, little arbitrary calls don't alway make sense
+
+#+END_NOTES
+
+  
+** Events
+- GTK events are not Xevents
+- Emacs takes raw Xevents
+- stop the type abuse
+#+BEGIN_NOTES
+There are cases where GTK functions want the raw event passed along,
+emacs expects all events to go through the lisp loop
+
+sometimes we need to fake things and lie to both sides
+#+END_NOTES
+
+  
+** Not all Backends are created equally
+- Global OR Local positioning
+  - Where is (0,0) 
+  - Where is the corner of the Window
+- Why is the popup in the wrong location
+#+BEGIN_NOTES
+
+on wayland, there are no global coordinates, only local to a window surface
+the window decoration is part of the surface and is part of the calculations for position.
+
+on X, everything is global, and the decoration is not part of window for reference
+
+when resizing a child window for popups, the size and offset would cause it to migrate up the screen or bounce in scrolling.
+
+solved by lieing to emacs, and wrapping child widgets inside a subsurface widget, rather than a full window
+ should be cheaper overall, soaked up every night I had to spare for close to a month
+
+ #+END_NOTES
+    
+* Integration
+   Final Merge to Savannah:
+   - 58 Changed files
+   - 16,028 additions and 157 deletions. 
+   
+* But does it work?
+
+* Yes!
+  - Developed on Arch (wlroots), Fedora/Silverblue (Gnome)
+  - Tested on FreeBSD Wayland
+  - Daily driver for nearly 12 months
+    
+#+BEGIN_NOTES
+I wanted to test on DragonflyBSD but I've had some troubles getting to desktop, and I for those that know me, I ran out of capacity to try on OpenIndiana, the solaris successor.
+There is no reason that this wouldn't work
+
+
+#+END_NOTES
+
+** But does it work
+   - Should match features of Impure GTK
+     - Bug if we differ
+   - Untested but perceived to be more performant
+   - Might use more RAM, might be GTK related
+
+** [[file:./workflow_2x.png]]
+
+** But this is different
+- XSettings are replaced with gsettings
+- Wayland won't support self-positioning
+
+* Where Next for PGTK Emacs?
+ 
+** Get to master
+  - currently a feature branch on gnu/Savannah
+  - Testing is needed
+    - Become default "GTK" if not default "X"
+  - GTK help always appreciated 
+  
+** GTK4
+- Finally released late 2020
+  - may not reap benefits
+  - Larger departure from X concepts
+- Experimental work in someone's branch
+
+** OpenGL/Vulkan/DirectX
+  - Cairo took 12 years...
+  - Text rendering very hard on a GPU
+    - What do we gain?
+      
+* But what about wider Emacs?
+  - Emacs won't polish up
+    - Keybindings will stay
+    - The GTK port isn't meant to address appearance
+    - Don't upset old users will remain
+#+BEGIN_NOTES
+just like lisp, we won't see dramatic changes for keybindings,
+We won't see a shift away from the ugly, welcome screen,
+but hopefully a change to add more info to help for new comers
+#+END_NOTES
+
+** But what about Emacs?
+   - Lisp won't be replaced
+     - Except for another Lisp
+ #+BEGIN_NOTES
+ Redisplay is only one part of the environment
+ It's very hard to predict things that will happen
+ but it's easier to consider things that are unlikely to occur
+ #+END_NOTES
+
+** But What about Emacs?
+   - Recent push to leverage common libraries
+     - Cairo
+     - Harfbuzz
+     - Libjansson
+   - A trend that could continue 
+#+BEGIN_NOTES
+Developers have hesitated adding dependencies without justification.
+Some libraries weren't well supported on platforms that emacs was supported.
+This stance has relaxed lately, and more optional dependencies have been added,
+There are still a few places where internal implementation is preferred,
+notably text layout does not use pango, instead 
+#+END_NOTES
+
+* Native Compilation
+- Andrea Corrello Asked and Delivered in late 2019
+- Uses libgccjit as a back-end of the byte compiler
+  - Wide Range of platform support
+  - Meets Political Requirements of GNU
+#+BEGIN_NOTES
+One new dependency 
+I can't skip over the huge effort by Andrea Corrallo In implementing
+and supporting native-compilation of elisp.
+I think many did not expect him to succeed when he first asked on emacs devel for peoples interest
+#+END_NOTES
+
+** Native Compilation
+- Noticeable improvement in start up, and interactivity
+  - Migration of code back to lisp
+  - Allow even more customisation
+- Emacs Distributions will take on more value
+  - No longer a theme and some packages
+  - Provide a more complete Environment from lisp
+
+* local apps are dying
+  - Everything is web based anyway
+  - No one uses a computer
+  - Emacs will go down in an ancient Era
+
+* Another Port?
+  - Is the next term a web frontend
+  - Should that rewrite of C be Javascript?!?!
+  - [[http://localhost:8085][Nah....]] 
+#+ATTR_HTML: :target _blank
+
+    
+* Acknowledgements
+- @Masm11 - Yuuki Harano (Main PGTK Developer)
+- Daniel Colascione - Buttery Smooth Emacs
+- Mastering Emacs
+- Emacs Maintainers
+- Emacs community
+
+
+#+BEGIN_NOTES
+I want to
+thank Yuuki Harano for completing the bulk of the port
+
+#+END_NOTES
